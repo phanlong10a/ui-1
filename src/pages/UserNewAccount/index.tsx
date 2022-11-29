@@ -1,34 +1,27 @@
-import { LeftOutlined, UserOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 import {
-  Avatar,
   Breadcrumb,
   Button,
   Col,
   Form,
   message,
   Row,
-  Select,
-  Switch,
-  Tree,
-  Typography,
-  Upload,
-  UploadFile,
+  Select, Upload,
+  UploadFile
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { history, Link, useIntl, useParams } from 'umi';
+import { history, Link, useIntl } from 'umi';
 import styles from './index.less';
 
-import type { DataNode, TreeProps } from 'antd/es/tree';
-import { useTranslate } from '@/utils/hooks/useTranslate';
-import PersonalInfo from './Components/PersonalInfo';
-import { useRequest, useToggle } from 'ahooks';
-import Dialog from './Components/Dialog';
-import { onSubmitValue } from './service';
-import { getAllRole } from '../UserEditAccount/service';
+import { ENVIRONMENTS } from '@/utils/constant';
 import { PERMISSIONS } from '@/utils/enum';
-import { ENVIRONMENTS, TREE_DATA_ROLE } from '@/utils/constant';
+import { useTranslate } from '@/utils/hooks/useTranslate';
+import { useRequest, useToggle } from 'ahooks';
 import { RcFile, UploadProps } from 'antd/es/upload/interface';
-import { API_PATH } from '@/utils/apis';
+import { getAllRole } from '../UserEditAccount/service';
+import Dialog from './Components/Dialog';
+import PersonalInfo from './Components/PersonalInfo';
+import { getDepartment, getPosition, onSubmitValue } from './service';
 
 export default () => {
   const { formatMessage } = useIntl();
@@ -38,13 +31,22 @@ export default () => {
 
   const [dataRole, setDataRole] = useState<any[]>([]);
 
-  useRequest(getAllRole, {
-    onSuccess(res: any) {
-      if (res?.data?.get_list_role?.data) {
-        setDataRole(res?.data?.get_list_role?.data);
-      }
-    },
-  });
+  const [listPosition, setListPosition] = useState<any[]>([])
+  const [listDepartment, setListDepartment] = useState<any[]>([])
+
+  useRequest(getDepartment, {
+    onSuccess(res) {
+      setListDepartment(res?.payload)
+    }
+  })
+
+  useRequest(getPosition, {
+    onSuccess(res) {
+      setListPosition(res?.payload?.data)
+    }
+  })
+
+
 
   const [selectedRoleId, setSelectedRoleId] = React.useState<string>('');
   const [checkedRole, setCheckedRole] = React.useState<any>(null);
@@ -127,49 +129,9 @@ export default () => {
   };
 
   const onFinish = (values: any) => {
-    const submitValues = {
-      email: values.email,
-      phone: values.phoneNumber,
-      password: values.password,
-      fullname: values.fullName,
-      roleId: values.roleId,
-      avatar: avatarLink,
-    };
-
+    console.log("🚀 ~ file: index.tsx ~ line 130 ~ onFinish ~ values", values)
     const data = {
-      query: `
-      mutation {
-        admin_register(
-          admin_register: {
-            email: "${submitValues.email}"
-            phone: "${submitValues.phone}"
-            password: "${submitValues.password}"
-            status: true
-            full_name: "${submitValues.fullname}"
-            roleId: "${submitValues.roleId}"
-            avatar: "${submitValues.avatar}"
-          }
-        ) {
-          message
-          data {
-            email
-            phone
-            id
-            status
-            admin_profile {
-              id
-              full_name
-              date_of_birth
-              address
-              date_modified
-              date_created
-              admin_id
-              avatar
-            } 
-          }
-        }
-      }
-    `,
+      query: '',
     };
     requestCreateUser.run(data);
   };
@@ -215,7 +177,7 @@ export default () => {
                     {fileList.length < 1 && 'Upload Avatar'}
                   </Upload>
                 </div>
-                <PersonalInfo />
+                <PersonalInfo listPosition={listPosition} listDepartment={listDepartment} />
               </div>
             </Col>
           </Row>

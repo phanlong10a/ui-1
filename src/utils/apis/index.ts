@@ -151,6 +151,8 @@ const API_PATH = {
   LIST_USER: '/user/api/list-employee',
   REFRESH_TOKEN: '/auth/refreshToken',
   FORGOT_PASSWORD: '/auth/forgotPassword',
+  list_position: '/position/api/list-position',
+  department: '/user/api/department',
   RESET_PASSWORD: '/auth/resetPassword',
   LOGOUT: '/auth/logout',
   USER: '/user',

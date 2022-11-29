@@ -5,3 +5,11 @@ export const onSubmitValue = (data: any) => {
     data,
   });
 };
+
+export const getDepartment = () => {
+  return privateRequest(request.get, API_PATH.department);
+};
+
+export const getPosition = () => {
+  return privateRequest(request.get, API_PATH.list_position);
+};

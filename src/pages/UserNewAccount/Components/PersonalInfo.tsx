@@ -1,8 +1,11 @@
 import { useTranslate } from '@/utils/hooks/useTranslate';
-import { Form, Input } from 'antd';
+import { Form, Input, Select } from 'antd';
 import { useIntl } from 'umi';
 import styles from '../index.less';
-type Props = {};
+type Props = {
+  listPosition: any[]
+  listDepartment: any[]
+};
 
 const PersonalInfo = (props: Props) => {
   const { t } = useTranslate();
@@ -61,6 +64,34 @@ const PersonalInfo = (props: Props) => {
             id: 'phone',
           })}
         />
+      </Form.Item>
+      <Form.Item
+        name="positionId"
+        label={'Vị trí'}
+      >
+        <Select>
+          {
+            props.listPosition.map((e, i) => {
+              return <Select.Option value={e.id} key={e.id}>
+                {e.position}
+              </Select.Option>
+            })
+          }
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name="departmentId"
+        label={'Department'}
+      >
+        <Select>
+          {
+            props.listDepartment.map((e, i) => {
+              return <Select.Option value={e.id} key={e.id}>
+                {e.department}
+              </Select.Option>
+            })
+          }
+        </Select>
       </Form.Item>
       <Form.Item
         label={formatMessage({ id: 'dateOfBirth' })}
