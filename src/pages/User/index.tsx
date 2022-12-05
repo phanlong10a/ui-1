@@ -88,7 +88,7 @@ export default () => {
   const handleNewAdmin = () => {
     history.push('/user_new/');
   };
-  const handleActiveAdmin = (isAdmin: number | string) => {
+  const deleteAdmin = (isAdmin: number | string) => {
     setIdSelected(isAdmin);
     setOpenDialog.set(true);
   };
@@ -107,8 +107,8 @@ export default () => {
     },
     {
       title: 'Họ Tên',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'fullName',
+      key: 'fullName',
     },
     {
       title: 'Ngày Sinh',
@@ -143,7 +143,7 @@ export default () => {
             <Tooltip title={formatMessage({ id: 'general_tooltip_delete' })}>
               <div
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleActiveAdmin(record.id)}
+                onClick={() => deleteAdmin(record.id)}
               >
                 <StopOutlined />
               </div>

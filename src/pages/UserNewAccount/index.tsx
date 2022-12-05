@@ -5,20 +5,14 @@ import {
   Col,
   Form,
   message,
-  Row,
-  Select, Upload,
-  UploadFile
+  Row, UploadFile
 } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { history, Link, useIntl } from 'umi';
 import styles from './index.less';
 
-import { ENVIRONMENTS } from '@/utils/constant';
-import { PERMISSIONS } from '@/utils/enum';
 import { useTranslate } from '@/utils/hooks/useTranslate';
 import { useRequest, useToggle } from 'ahooks';
-import { RcFile, UploadProps } from 'antd/es/upload/interface';
-import { getAllRole } from '../UserEditAccount/service';
 import Dialog from './Components/Dialog';
 import PersonalInfo from './Components/PersonalInfo';
 import { getDepartment, getPosition, onSubmitValue } from './service';
@@ -47,77 +41,17 @@ export default () => {
   })
 
 
-
-  const [selectedRoleId, setSelectedRoleId] = React.useState<string>('');
-  const [checkedRole, setCheckedRole] = React.useState<any>(null);
-  const [avatarLink, setAvatarLink] = React.useState<any>(null);
-
-  useEffect(() => {
-    if (selectedRoleId && selectedRoleId !== '') {
-      handleRoleChecked(selectedRoleId);
-    }
-  }, [selectedRoleId]);
-
-  const handleRoleChecked = (id: string) => {
-    const roles = dataRole.find((dataRole) => dataRole.id === id);
-    if (!roles.permissions) return;
-    const listRoleCheck = [];
-    for (let role in roles.permissions) {
-      if (role === 'id') continue;
-      if (roles.permissions[role] === PERMISSIONS.FULL) {
-        listRoleCheck.push(`${role}_${PERMISSIONS.FULL}`);
-        listRoleCheck.push(`${role}_${PERMISSIONS.READ}`);
-      }
-      if (roles.permissions[role] === PERMISSIONS.READ) {
-        listRoleCheck.push(`${role}_${PERMISSIONS.READ}`);
-      }
-    }
-    setCheckedRole(listRoleCheck);
-  };
-
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
-
-  const onChange: UploadProps['onChange'] = ({
-    file,
-    fileList: newFileList,
-    event,
-  }) => {
-    if (file.response) {
-      setAvatarLink(file.response.path);
-    }
-    setFileList(newFileList);
-  };
-
   const requestCreateUser = useRequest(onSubmitValue, {
     manual: true,
     onSuccess(data: any) {
       if (data.errors) {
         message.error('create account error message');
       } else {
-        history.push('/admin');
+        history.push('/user');
         message.success('Create account success message');
       }
     },
   });
-
-  const { Option } = Select;
-
-  const handleChange = (value: string) => {
-    setSelectedRoleId(value);
-  };
 
   const { t } = useTranslate();
   const [openDialog, setOpenDialog] = useToggle(false);
@@ -129,9 +63,8 @@ export default () => {
   };
 
   const onFinish = (values: any) => {
-    console.log("🚀 ~ file: index.tsx ~ line 130 ~ onFinish ~ values", values)
     const data = {
-      query: '',
+      ...values
     };
     requestCreateUser.run(data);
   };
@@ -161,22 +94,6 @@ export default () => {
           <Row>
             <Col span={12}>
               <div className={styles.detailAdm}>
-                <div className={styles.uploadFileWrapper}>
-                  {/* @ts-ignore */}
-                  <Upload
-                    action={ENVIRONMENTS.API_URL + '/avatar/api/upload_images'}
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={onChange}
-                    onPreview={onPreview}
-                    className={styles.uploadFile}
-                    onRemove={() => {
-                      setAvatarLink(null);
-                    }}
-                  >
-                    {fileList.length < 1 && 'Upload Avatar'}
-                  </Upload>
-                </div>
                 <PersonalInfo listPosition={listPosition} listDepartment={listDepartment} />
               </div>
             </Col>

@@ -45,8 +45,8 @@ const Dialog: React.FC<Iprops> = ({
   const deteteRequest = useRequest(deleteAdmin, {
     manual: true,
   });
-  const handleOk = () => {
-    deteteRequest.run(id);
+  const handleOk = async () => {
+    await deteteRequest.run(id);
     setOpen(false);
   };
 

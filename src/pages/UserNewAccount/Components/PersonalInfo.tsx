@@ -28,14 +28,17 @@ const PersonalInfo = (props: Props) => {
         <Input placeholder="Full Name" />
       </Form.Item>
       <Form.Item
-        label={formatMessage({ id: 'address' })}
-        name="address"
+        label={formatMessage({ id: 'email' })}
+        name="email"
         rules={[
           {
             required: true,
             message: t('error.require', {
               field: t('address'),
             }),
+          },
+          {
+            type: 'email'
           },
         ]}
       >
@@ -91,6 +94,22 @@ const PersonalInfo = (props: Props) => {
               </Select.Option>
             })
           }
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name="role"
+        label={'Quyền'}
+      >
+        <Select>
+          <Select.Option value={'1'} >
+            admin
+          </Select.Option>
+          <Select.Option value={'2'} >
+            staff
+          </Select.Option>
+          <Select.Option value={'3'} >
+            editor
+          </Select.Option>
         </Select>
       </Form.Item>
       <Form.Item

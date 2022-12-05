@@ -36,17 +36,7 @@ export const getTableData = (
 };
 
 export const deleteAdmin = (id: any) => {
-  const query = `
-  mutation {
-    delete_admin(input: { id: "${id}" })
-  }
-
-  `;
-  return privateRequest(request.post, API_PATH.default, {
-    data: {
-      query,
-    },
-  });
+  return privateRequest(request.delete, API_PATH.deleteAdmin + id);
 };
 
 export const switchStatusAdmin = (id: any) => {

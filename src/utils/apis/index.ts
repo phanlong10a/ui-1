@@ -146,6 +146,10 @@ const privateRequest = async (
 const API_PATH = {
   default: '/graphql',
   // Auth
+  createUser: '/admin/api/create-employee',
+  updateUser: '/admin/api/user',
+  getUser: '/user/api/get-user/',
+  deleteAdmin: '/admin/api/user/',
   UPLOAD: '/upload-service/file',
   LOGIN: '/auth/api/login',
   LIST_USER: '/user/api/list-employee',
