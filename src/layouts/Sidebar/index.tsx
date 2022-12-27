@@ -14,7 +14,7 @@ import {
 } from '@ant-design/icons';
 import { Avatar, MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { useIntl, useLocation } from 'umi';
 
 import { Link } from 'umi';
@@ -51,6 +51,105 @@ const Sidebar = ({
   const location = useLocation();
   const { onLogout } = useAuth();
 
+  const [currentMenu, setCurrentMenu] = useState<any>([])
+  React.useEffect(() => {
+    const authData = window?.localStorage.getItem(
+      ENVIRONMENTS.LOCAL_STORAGE_KEY as string,
+    );
+    let authObj: any = {};
+    if (authData) {
+      authObj = JSON.parse(authData);
+    }
+    if (authObj.role === 'ADMIN') {
+      setCurrentMenu([
+        getItem(
+          renderLink('/user', 'Quản lý user'),
+          '/user',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/department', 'Quản lý phòng ban'),
+          '/department',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/position', 'Quản lý vị trí'),
+          '/position',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/policy', 'Quản lý điều khoản'),
+          '/policy',
+          <IdcardOutlined />,
+        ),
+
+        getItem(
+          renderLink('/NewUser', 'Danh sách tin tức'),
+          '/NewUser',
+          <IdcardOutlined />,
+        ),
+      ])
+    }
+    if (authObj.role === 'STAFF') {
+      setCurrentMenu([
+        getItem(
+          renderLink('/checkin', 'Checkin'),
+          '/checkin',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/user-user', 'Danh sách nhân viên'),
+          '/user-user',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/NewUser', 'Danh sách tin tức'),
+          '/NewUser',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/DepartmentUser', 'Danh sách phòng ban'),
+          '/DepartmentUser',
+          <IdcardOutlined />,
+        ),
+      ])
+    }
+    if (authObj.role === 'EDITER') {
+      setCurrentMenu([
+        getItem(
+          renderLink('/list-salary', 'Danh sách lương nhân viên'),
+          '/list-salary',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/salary', 'Tính lương nhân viên'),
+          '/salary',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/dot_infomation', 'Danh sách'),
+          '/dot_infomation',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/new', 'Quản lý tin tức'),
+          '/new',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/user-user', 'Danh sách nhân viên'),
+          '/user-user',
+          <IdcardOutlined />,
+        ),
+        getItem(
+          renderLink('/DepartmentUser', 'Danh sách phòng ban'),
+          '/DepartmentUser',
+          <IdcardOutlined />,
+        ),
+      ])
+    }
+  }, [])
+
   const renderLink: (link: string, title: string) => React.ReactNode = (
     link: string,
     title: string,
@@ -62,14 +161,6 @@ const Sidebar = ({
     );
   };
 
-  const items: MenuItem[] = [
-
-    getItem(
-      renderLink('/user', 'Quản lý user'),
-      '/user',
-      <IdcardOutlined />,
-    ),
-  ];
   // @ts-ignore
   const local = JSON.parse(
     // @ts-ignore
@@ -89,9 +180,7 @@ const Sidebar = ({
     >
       <div className={styles.logoWrapper}>
         <AlignLeftOutlined className={styles.toggleButton} onClick={onToggle} />
-        {!collapsed && (
-          <img src="/assets/images/main-logo.png" className={styles.logo} />
-        )}
+
       </div>
       <div className={styles.sidebarAvatar}>
         <Avatar icon={<UserOutlined />} />
@@ -100,7 +189,7 @@ const Sidebar = ({
       <Menu
         defaultSelectedKeys={[location.pathname]}
         mode="inline"
-        items={items}
+        items={currentMenu}
         className={styles.backgroundPrimary}
       />
       <div

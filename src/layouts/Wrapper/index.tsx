@@ -17,8 +17,8 @@ const Wrapper = ({
 
   useLayoutEffect(() => {
     const token = getAccessToken();
-    if (!token) history.push('/login');
-    if (token && location.pathname === '/login') history.push('/user');
+    if (!token && (location.pathname !== '/login' && !location.pathname.includes('/reset-pass'))) history.push('/login');
+    if (token && location.pathname === '/login') history.push('/account');
   }, []);
 
   useLayoutEffect(() => {

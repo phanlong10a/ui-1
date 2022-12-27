@@ -83,7 +83,7 @@ export const useAuth = () => {
 
   const onLogin = (data: IAuth) => {
     setAuthData(data);
-    history.push('/');
+    history.push('/account');
   };
 
   return {

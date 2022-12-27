@@ -19,9 +19,12 @@ export const useLogin = () => {
       manual: true,
       onSuccess: (result) => {
         if (!result.payload || result?.code === 400 || result?.code === 404) throw new Error('Account not found');
+        console.log("🚀 ~ file: service.ts:32 ~ useLogin ~ result", result)
         const loginItem = {
           token: result.payload.token,
           refreshToken: result.payload.refresh_token,
+          role: result.payload.role,
+          fullName: result.payload.fullName,
         };
         onLogin(loginItem);
       },

@@ -16,7 +16,7 @@ const MainHeader = () => {
         {
           label: (
             <Button type="text">
-              <Link to="/">{formatMessage({ id: 'account' })}</Link>
+              <Link to="/account">{formatMessage({ id: 'account' })}</Link>
             </Button>
           ),
           key: '0',

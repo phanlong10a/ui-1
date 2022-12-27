@@ -146,17 +146,60 @@ const privateRequest = async (
 const API_PATH = {
   default: '/graphql',
   // Auth
-  createUser: '/admin/api/create-employee',
-  updateUser: '/admin/api/user',
-  getUser: '/user/api/get-user/',
-  deleteAdmin: '/admin/api/user/',
-  UPLOAD: '/upload-service/file',
-  LOGIN: '/auth/api/login',
-  LIST_USER: '/user/api/list-employee',
+  createUser: '/api/admin/create-employee',
+  updateProfile: '/api/user/information',
+  chain_password: '/api/user/chain_password',
+  updateUser: '/api/admin/user',
+  getUser: '/api/user/get-user/',
+  deleteUser: '/api/admin/user/',
+
+
+  list_department: '/api/department/list_department',
+  list_department_user: '/api/user/department',
+  createDepartment: '/api/department/create',
+  updateDepartment: '/api/department/update',
+  deleteDepartment: '/api/department/delete/',
+
+
+  list_position: '/api/position/list-position',
+  create_position: '/api/position/create-position',
+  update_position: '/api/position/update-position',
+  delete_position: '/api/position/delete-position/',
+
+
+  list_policy: '/api/policy/list-policy',
+  create_policy: '/api/policy/create-policy',
+  update_policy: '/api/policy/update-policy',
+  delete_policy: '/api/policy/delete-policy/',
+
+  list_news: '/api/news/list-news',
+  list_news_user: '/api/user/news',
+  create_news: '/api/news/create-news',
+  update_news: '/api/news/update-news',
+  delete_news: '/api/news/delete-news/',
+
+
+
+  forgot_email: '/api/auth/forgot_password',
+  forgot_phone: '/api/auth/forgot-otp',
+
+  my_profile: '/api/user/profile',
+
+  list_salary: '/api/dot/list-salary',
+  dot_information: '/api/dot/dot_information',
+
+  salary: '/api/dot/salary',
+
+  checkin: '/api/timekeeping/entry',
+  checkout: '/api/timekeeping/out',
+
+  UPLOAD: '/api/avatar/upload_images',
+  LOGIN: '/api/auth/login',
+  LIST_USER: '/api/admin/list-user',
+  LIST_USER_USER: '/api/user/list-employee',
   REFRESH_TOKEN: '/auth/refreshToken',
   FORGOT_PASSWORD: '/auth/forgotPassword',
-  list_position: '/position/api/list-position',
-  department: '/user/api/department',
+  department: '/api/user/department',
   RESET_PASSWORD: '/auth/resetPassword',
   LOGOUT: '/auth/logout',
   USER: '/user',

@@ -18,12 +18,6 @@ import PersonalInfo from './Components/PersonalInfo';
 import { getDepartment, getPosition, onSubmitValue } from './service';
 
 export default () => {
-  const { formatMessage } = useIntl();
-
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [ellipsis, setEllipsis] = useState(false);
-
-  const [dataRole, setDataRole] = useState<any[]>([]);
 
   const [listPosition, setListPosition] = useState<any[]>([])
   const [listDepartment, setListDepartment] = useState<any[]>([])
@@ -45,10 +39,10 @@ export default () => {
     manual: true,
     onSuccess(data: any) {
       if (data.errors) {
-        message.error('create account error message');
+        message.error('Tạo tài khoản thất bại');
       } else {
         history.push('/user');
-        message.success('Create account success message');
+        message.success('Tạo tài khoản thành công');
       }
     },
   });
@@ -76,7 +70,7 @@ export default () => {
         <Breadcrumb.Item className={styles.breacrumbItem}>
           <Link to="/user" className={styles.previousEditLink}>
             <LeftOutlined />
-            <div>{formatMessage({ id: 'admin_new_account' })}</div>
+            <div>Tạo mới nhân viên</div>
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>

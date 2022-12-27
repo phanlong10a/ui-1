@@ -126,13 +126,13 @@ export default () => {
       key: 'position',
     },
     {
-      title: 'const_column_action',
+      title: 'Hành động',
       dataIndex: 'custom',
       align: 'center',
       render: (value: any, record: any, index: number) => {
         return (
           <div className={styles.activeButton}>
-            <Tooltip title={formatMessage({ id: 'general_edit' })}>
+            <Tooltip title={"Chỉnh sửa"}>
               <div
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleEditAdmin(record.id)}
@@ -140,7 +140,7 @@ export default () => {
                 <EditOutlined />
               </div>
             </Tooltip>
-            <Tooltip title={formatMessage({ id: 'general_tooltip_delete' })}>
+            <Tooltip title={"Xoá"}>
               <div
                 style={{ cursor: 'pointer' }}
                 onClick={() => deleteAdmin(record.id)}
@@ -176,7 +176,7 @@ export default () => {
     <>
       <Breadcrumb className={styles.breadcrumb}>
         <Breadcrumb.Item>
-          {formatMessage({ id: 'navigation_admin' })}
+          Quản lý nhân viên
         </Breadcrumb.Item>
       </Breadcrumb>
       {searchForm}
@@ -187,7 +187,7 @@ export default () => {
           <Table
             {...tableProps}
             columns={columns}
-            locale={{ emptyText: formatMessage({ id: 'const_column_empty' }) }}
+            locale={{ emptyText: 'Trống' }}
             scroll={{ x: 1000 }}
           />
         )}

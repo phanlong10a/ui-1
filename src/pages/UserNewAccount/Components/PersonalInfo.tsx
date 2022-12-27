@@ -13,22 +13,9 @@ const PersonalInfo = (props: Props) => {
 
   return (
     <div className={styles.formGeneric}>
+
       <Form.Item
-        label={formatMessage({ id: 'fullname' })}
-        name="fullName"
-        rules={[
-          {
-            required: true,
-            message: t('error.require', {
-              field: t('fullname'),
-            }),
-          },
-        ]}
-      >
-        <Input placeholder="Full Name" />
-      </Form.Item>
-      <Form.Item
-        label={formatMessage({ id: 'email' })}
+        label={'Email'}
         name="email"
         rules={[
           {
@@ -42,9 +29,9 @@ const PersonalInfo = (props: Props) => {
           },
         ]}
       >
-        <Input placeholder="address" />
+        <Input placeholder="Email" />
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         label={formatMessage({ id: 'phone' })}
         name="phone"
         rules={[
@@ -67,7 +54,7 @@ const PersonalInfo = (props: Props) => {
             id: 'phone',
           })}
         />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item
         name="positionId"
         label={'Vị trí'}
@@ -101,9 +88,6 @@ const PersonalInfo = (props: Props) => {
         label={'Quyền'}
       >
         <Select>
-          <Select.Option value={'1'} >
-            admin
-          </Select.Option>
           <Select.Option value={'2'} >
             staff
           </Select.Option>
@@ -112,7 +96,7 @@ const PersonalInfo = (props: Props) => {
           </Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         label={formatMessage({ id: 'dateOfBirth' })}
         name="dateOfBirth"
         rules={[
@@ -131,7 +115,7 @@ const PersonalInfo = (props: Props) => {
         ]}
       >
         <Input placeholder={formatMessage({ id: 'dateOfBirth' })} />
-      </Form.Item>
+      </Form.Item> */}
     </div>
   );
 };
