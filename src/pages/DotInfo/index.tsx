@@ -1,8 +1,12 @@
 import { useAntdTable, useToggle } from 'ahooks';
 import {
-  Breadcrumb, Button, Form,
+  Breadcrumb,
+  Button,
+  Form,
   Input,
-  message, Skeleton, Table
+  message,
+  Skeleton,
+  Table,
 } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
@@ -11,7 +15,6 @@ import { useHistory, useIntl, useRequest } from 'umi';
 import Dialog from './Components/Dialog';
 import styles from './index.less';
 import { getTableData, switchStatusAdmin } from './service';
-
 
 interface DataType {
   key: string;
@@ -37,8 +40,8 @@ export default () => {
     getTableData,
     {
       form,
-      onSuccess(data, params) {
-        setUserName(data?.name)
+      onSuccess(data: any, params) {
+        setUserName(data?.name);
       },
       onError: (error: any) => {
         message.error(
@@ -70,60 +73,49 @@ export default () => {
       dataIndex: 'salary',
       key: 'salary',
       render: (_: any, record: any) => {
-        return moment(record.entryTime).format('YYYY/MM/DD HH:mm:ss')
-      }
+        return moment(record.entryTime).format('YYYY/MM/DD HH:mm:ss');
+      },
     },
     {
       title: 'Giờ ra',
       dataIndex: 'timeout',
       key: 'timeout',
       render: (_: any, record: any) => {
-        return moment(record.timeout).format('YYYY/MM/DD HH:mm:ss')
-      }
+        return moment(record.timeout).format('YYYY/MM/DD HH:mm:ss');
+      },
     },
-  ]
-
+  ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
       <Form form={form} className={styles.searchForm}>
         <Form.Item name="months" className={styles.searchItem}>
-          <Input
-            placeholder={'Nhập tháng cần xem lương'}
-            allowClear
-          />
+          <Input placeholder={'Nhập tháng cần xem lương'} allowClear />
         </Form.Item>
         <Form.Item name="staffCode" className={styles.searchItem}>
-          <Input
-            placeholder={'Nhập mã nhân viên'}
-            allowClear
-            required
-          />
+          <Input placeholder={'Nhập mã nhân viên'} allowClear required />
         </Form.Item>
 
         <Button
           type="primary"
           onClick={() => {
-            submit()
-            setTableVisible(true)
+            submit();
+            setTableVisible(true);
           }}
         >
           Tỉm kiếm
         </Button>
       </Form>
-    </div >
+    </div>
   );
 
   return (
     <>
       <Breadcrumb className={styles.breadcrumb}>
-        <Breadcrumb.Item>
-          Xem chấm công
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Xem chấm công</Breadcrumb.Item>
       </Breadcrumb>
       {searchForm}
-      {
-        tableVisible &&
+      {tableVisible && (
         <div className={styles.tableComponent}>
           <div>Nhân viên:{username}</div>
           {loading || error ? (
@@ -137,7 +129,7 @@ export default () => {
             />
           )}
         </div>
-      }
+      )}
       {openDialog && (
         <Dialog
           open={openDialog}

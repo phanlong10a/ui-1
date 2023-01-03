@@ -1,52 +1,24 @@
-import {
-  Button, Form, message
-} from 'antd';
+import { Button, Col, message, Row } from 'antd';
 import React from 'react';
-import { history, useParams } from 'umi';
+import { history } from 'umi';
 import styles from './index.less';
 
 import { API_PATH, privateRequest, request } from '@/utils/apis';
 import { useTranslate } from '@/utils/hooks/useTranslate';
 import { useRequest, useToggle } from 'ahooks';
-import { onEditValue, onSubmitValue } from './service';
+import { onSubmitValue } from './service';
+import moment from 'moment';
 
 export default () => {
+  const [data, setData] = React.useState<any>(null);
+  console.log('🚀 ~ file: index.tsx:16 ~ data', data);
 
-  const params: any = useParams()
-
-  const [form] = Form.useForm();
-  const [currentData, setCurrentData] = React.useState<any>(null)
-  const [load, setLoad] = React.useState<any>(true)
-
-  React.useEffect(() => {
-    if (params.id) {
-      setCurrentData(params.name)
-      setLoad(false)
-    } else {
-      setLoad(false)
-    }
-  }, [params, params?.id])
-
-
-  const requestCreateDep = useRequest(onSubmitValue, {
-    manual: true,
+  const initValue = useRequest(onSubmitValue, {
     onSuccess(data: any) {
       if (data.errors) {
         message.error('Thất bại');
       } else {
-        history.push('/department');
-        message.success('Thành công');
-      }
-    },
-  });
-  const requestEditDep = useRequest(onEditValue, {
-    manual: true,
-    onSuccess(data: any) {
-      if (data.errors) {
-        message.error('Thất bại');
-      } else {
-        history.push('/department');
-        message.success('Thành công');
+        setData(data.payload);
       }
     },
   });
@@ -60,42 +32,60 @@ export default () => {
     setOpenDialog.set(true);
   };
 
-  const onFinish = (values: any) => {
-    const data = {
-      ...values
-    };
-    if (!!params.id) {
-      requestEditDep.run(data, params.id);
-    } else {
-      requestCreateDep.run(data);
-    }
-  };
   const onCheckin = async () => {
-    const res = await privateRequest(request.post, API_PATH.checkin)
-    message.success(res.message)
-  }
+    const res = await privateRequest(request.post, API_PATH.checkin);
+    initValue.refresh();
+    message.success(res.message);
+  };
   const onCheckout = async () => {
-    const res = await privateRequest(request.post, API_PATH.checkout)
-    message.success(res.message)
-  }
+    const res = await privateRequest(request.post, API_PATH.checkout);
+    initValue.refresh();
+    message.success(res.message);
+  };
 
   return (
-    <>
-      <Button
-
-        type="primary"
-        onClick={onCheckin}
-        className={styles.addButton}
-      >
-        Checkin
-      </Button>
-      <Button
-        type="dashed"
-        onClick={onCheckout}
-        className={styles.addButton}
-      >
-        Checkout
-      </Button>
-    </>
+    data && (
+      <>
+        <Row>
+          <Col>
+            {data.entryTime == 'null' ? (
+              <Button
+                type="primary"
+                onClick={onCheckin}
+                className={styles.addButton}
+              >
+                Checkin
+              </Button>
+            ) : data.timeout == 'null' ? (
+              <Button
+                type="dashed"
+                onClick={onCheckout}
+                className={styles.addButton}
+              >
+                Checkout
+              </Button>
+            ) : (
+              <></>
+            )}
+          </Col>
+        </Row>
+        {data.entryTime != 'null' && (
+          <Row style={{ marginTop: 16 }}>
+            <Col>
+              Thời gian checkin{' '}
+              {moment(data.entryTime).format('YYYY-MM-DD HH:mm')}
+            </Col>
+          </Row>
+        )}
+        {data.timeout != 'null' && (
+          <Row style={{ marginTop: 16 }}>
+            <Col>
+              Thời gian checkout{' '}
+              {moment(data.timeout).format('YYYY-MM-DD HH:mm')}
+            </Col>
+          </Row>
+        )}
+      </>
+    )
   );
 };

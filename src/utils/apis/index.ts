@@ -153,19 +153,16 @@ const API_PATH = {
   getUser: '/api/user/get-user/',
   deleteUser: '/api/admin/user/',
 
-
   list_department: '/api/department/list_department',
   list_department_user: '/api/user/department',
   createDepartment: '/api/department/create',
   updateDepartment: '/api/department/update',
   deleteDepartment: '/api/department/delete/',
 
-
   list_position: '/api/position/list-position',
   create_position: '/api/position/create-position',
   update_position: '/api/position/update-position',
   delete_position: '/api/position/delete-position/',
-
 
   list_policy: '/api/policy/list-policy',
   create_policy: '/api/policy/create-policy',
@@ -178,15 +175,18 @@ const API_PATH = {
   update_news: '/api/news/update-news',
   delete_news: '/api/news/delete-news/',
 
-
+  create_meet: '/zoom/meeting',
 
   forgot_email: '/api/auth/forgot_password',
+  reset_pass: '/api/auth/reset-otp',
   forgot_phone: '/api/auth/forgot-otp',
 
   my_profile: '/api/user/profile',
 
   list_salary: '/api/dot/list-salary',
   dot_information: '/api/dot/dot_information',
+
+  get_keeping: '/api/timekeeping/get-keeping',
 
   salary: '/api/dot/salary',
 

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Radio, RadioChangeEvent } from 'antd';
+import { Button, Form, Input, message, Radio, RadioChangeEvent } from 'antd';
 import React, { useState } from 'react';
 import { useLogin } from './service';
 
@@ -14,19 +14,30 @@ const Login: React.FC = () => {
   const { loading, run } = useLogin();
   const [isForgot, setIsForgot] = useState(false);
   const [isForgotEmail, setIsForgotEmail] = useState(true);
-  const [isOpenDialog, setIsOpenDialog] = useState(false)
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [idForgot, setIdForgot] = useState(null);
 
   const onFinish = async (values: any) => {
     if (isForgot) {
       if (isForgotEmail) {
-        await axios.post(ENVIRONMENTS.API_URL + API_PATH.forgot_email, {
-          email: values.phone_number
-        })
+        await axios
+          .post(ENVIRONMENTS.API_URL + API_PATH.forgot_email, {
+            email: values.phone_number,
+          })
+          .then(() => {
+            message.success('Thành công, vui lòng kiểm tra email');
+          });
       } else {
-        await axios.post(ENVIRONMENTS.API_URL + API_PATH.forgot_phone, {
-          phone: values.phone_number
-        })
-        setIsOpenDialog(true)
+        await axios
+          .post(ENVIRONMENTS.API_URL + API_PATH.forgot_phone, {
+            phone: values.phone_number,
+          })
+          .then((data) => {
+            setIdForgot(data.data.payload.id);
+            console.log('🚀 ~ file: index.tsx:32 ~ onFinish ~ data', data);
+            message.success(data.data.message);
+          });
+        setIsOpenDialog(true);
       }
     } else {
       run(values);
@@ -36,8 +47,8 @@ const Login: React.FC = () => {
   return (
     <div className={styles.loginWrap}>
       <h1>Chấm công</h1>
-      {
-        !isForgot ? <Form
+      {!isForgot ? (
+        <Form
           onFinish={onFinish}
           layout="vertical"
           initialValues={{
@@ -83,62 +94,63 @@ const Login: React.FC = () => {
           >
             {t('login')}
           </Button>
-        </Form> :
-          <Form
-            onFinish={onFinish}
-            layout="vertical"
-            initialValues={{
-              phone_number: 'vuhoan485@gmail.com',
-              password: 'hoan10a8',
-            }}
+        </Form>
+      ) : (
+        <Form
+          onFinish={onFinish}
+          layout="vertical"
+          initialValues={{
+            phone_number: 'vuhoan485@gmail.com',
+            password: 'hoan10a8',
+          }}
+        >
+          <Form.Item
+            className={styles.formItem}
+            label="Quên mật khẩu bằng"
+            initialValue={true}
+            rules={[
+              {
+                required: true,
+                message: t('error.require'),
+              },
+            ]}
           >
-            <Form.Item
-              className={styles.formItem}
-              label="Quên mật khẩu bằng"
-              initialValue={true}
-              rules={[
-                {
-                  required: true,
-                  message: t('error.require'),
-                },
-              ]}
+            <Radio.Group
+              defaultValue={true}
+              onChange={(e: RadioChangeEvent) => {
+                console.log('radio checked', e.target.value);
+                setIsForgotEmail(e.target.value);
+              }}
             >
-              <Radio.Group
-                defaultValue={true}
-                onChange={(e: RadioChangeEvent) => {
-                  console.log('radio checked', e.target.value);
-                  setIsForgotEmail(e.target.value);
-                }} >
-                <Radio value={true}>Email</Radio>
-                <Radio value={false}>Số điện thoại</Radio>
-              </Radio.Group>
+              <Radio value={true}>Email</Radio>
+              <Radio value={false}>Số điện thoại</Radio>
+            </Radio.Group>
+          </Form.Item>
 
-            </Form.Item>
-
-            <Form.Item
-              name="phone_number"
-              rules={[
-                {
-                  required: true,
-                  message: t('error.require', {
-                    field: t('password'),
-                  }),
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-              className={styles.btnSubmit}
-            >
-              Gửi thông tin
-            </Button>
-          </Form>
-      }
-      {!isForgot ?
+          <Form.Item
+            name="phone_number"
+            rules={[
+              {
+                required: true,
+                message: t('error.require', {
+                  field: t('password'),
+                }),
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+            className={styles.btnSubmit}
+          >
+            Gửi thông tin
+          </Button>
+        </Form>
+      )}
+      {!isForgot ? (
         <Button
           type="ghost"
           onClick={() => {
@@ -147,7 +159,9 @@ const Login: React.FC = () => {
           className={styles.btnSubmit}
         >
           Quên mật khẩu
-        </Button> : <Button
+        </Button>
+      ) : (
+        <Button
           type="ghost"
           loading={loading}
           onClick={() => {
@@ -157,10 +171,11 @@ const Login: React.FC = () => {
         >
           Quay lại
         </Button>
-      }
+      )}
       {isOpenDialog && (
         <Dialog
           open={isOpenDialog}
+          idForgot={idForgot}
           setOpen={(b) => {
             setIsOpenDialog(b);
           }}

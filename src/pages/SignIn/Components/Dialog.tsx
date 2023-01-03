@@ -1,16 +1,18 @@
-import {
-  Button, Form, Input, Modal, Select
-} from 'antd';
+import { Button, Form, Input, message, Modal, Select } from 'antd';
 import React, { useState } from 'react';
 import { useTranslate } from '@/utils/hooks/useTranslate';
-import { history } from 'umi';
+import { history, useHistory } from 'umi';
 import styles from '../index.less';
+import axios from 'axios';
+import { ENVIRONMENTS } from '@/utils/constant';
+import { API_PATH } from '@/utils/apis';
 const { Option } = Select;
 
 interface Iprops {
   open: boolean;
   setOpen: (b: boolean) => void;
   itemEdit: any;
+  idForgot: any;
 }
 const Dialog: React.FC<Iprops> = ({
   open,
@@ -21,6 +23,7 @@ const Dialog: React.FC<Iprops> = ({
 }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Bạn có chắc chắn muốn huỷ ?');
+  const history = useHistory();
   const { t } = useTranslate();
   const handleOk = () => {
     setOpen(false);
@@ -32,11 +35,17 @@ const Dialog: React.FC<Iprops> = ({
     setOpen(false);
   };
 
-  const onFinish = (value: any) => {
-    console.log("🚀 ~ file: Dialog.tsx:36 ~ onFinish ~ value", value)
-    return {
-    }
-  }
+  const onFinish = async (value: any) => {
+    await axios
+      .post(ENVIRONMENTS.API_URL + API_PATH.reset_pass, {
+        ...value,
+        id: parseInt(rest.idForgot),
+      })
+      .then((data) => {
+        message.success(data.data.message);
+        window.location.reload();
+      });
+  };
 
   return (
     <>
@@ -44,15 +53,13 @@ const Dialog: React.FC<Iprops> = ({
         open={open}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        footer={<></>}
         cancelText="Đóng"
       >
-        <Form
-          onFinish={onFinish}
-          layout="vertical"
-        >
+        <Form onFinish={onFinish} layout="vertical">
           <Form.Item
             label="OTP"
-            name="phone_number"
+            name="otp"
             rules={[
               {
                 required: true,
@@ -78,11 +85,7 @@ const Dialog: React.FC<Iprops> = ({
           >
             <Input.Password />
           </Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className={styles.btnSubmit}
-          >
+          <Button type="primary" htmlType="submit" className={styles.btnSubmit}>
             Gửi thông tin
           </Button>
         </Form>

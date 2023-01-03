@@ -12,13 +12,15 @@ import {
   UsergroupDeleteOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Avatar, MenuProps } from 'antd';
+import { useRequest } from 'ahooks';
+import { Avatar, Button, MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { useIntl, useLocation } from 'umi';
 
 import { Link } from 'umi';
 import styles from './index.less';
+import { onSubmitValue } from './service';
 
 const { Sider } = Layout;
 
@@ -51,7 +53,18 @@ const Sidebar = ({
   const location = useLocation();
   const { onLogout } = useAuth();
 
-  const [currentMenu, setCurrentMenu] = useState<any>([])
+  const onCreateMeetR = useRequest(onSubmitValue, {
+    manual: true,
+    onSuccess(data, params) {
+      window.open(data.start_url, '_blank');
+    },
+  });
+
+  const onCreateMeet = () => {
+    onCreateMeetR.run();
+  };
+
+  const [currentMenu, setCurrentMenu] = useState<any>([]);
   React.useEffect(() => {
     const authData = window?.localStorage.getItem(
       ENVIRONMENTS.LOCAL_STORAGE_KEY as string,
@@ -88,7 +101,7 @@ const Sidebar = ({
           '/NewUser',
           <IdcardOutlined />,
         ),
-      ])
+      ]);
     }
     if (authObj.role === 'STAFF') {
       setCurrentMenu([
@@ -112,7 +125,7 @@ const Sidebar = ({
           '/DepartmentUser',
           <IdcardOutlined />,
         ),
-      ])
+      ]);
     }
     if (authObj.role === 'EDITER') {
       setCurrentMenu([
@@ -146,9 +159,23 @@ const Sidebar = ({
           '/DepartmentUser',
           <IdcardOutlined />,
         ),
-      ])
+        getItem(
+          <Button
+            type="default"
+            className={styles.meet}
+            loading={onCreateMeetR.loading}
+            onClick={() => {
+              onCreateMeet();
+            }}
+          >
+            Tạo cuộc họp
+          </Button>,
+          '',
+          '',
+        ),
+      ]);
     }
-  }, [])
+  }, []);
 
   const renderLink: (link: string, title: string) => React.ReactNode = (
     link: string,
@@ -180,7 +207,6 @@ const Sidebar = ({
     >
       <div className={styles.logoWrapper}>
         <AlignLeftOutlined className={styles.toggleButton} onClick={onToggle} />
-
       </div>
       <div className={styles.sidebarAvatar}>
         <Avatar icon={<UserOutlined />} />
