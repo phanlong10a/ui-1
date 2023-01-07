@@ -1,13 +1,5 @@
 import { LeftOutlined } from '@ant-design/icons';
-import {
-  Breadcrumb,
-  Button,
-  Col,
-  Form,
-  Input,
-  message,
-  Row
-} from 'antd';
+import { Breadcrumb, Button, Col, Form, Input, message, Row } from 'antd';
 import React, { useState } from 'react';
 import { history, Link, useParams } from 'umi';
 import styles from './index.less';
@@ -15,25 +7,28 @@ import styles from './index.less';
 import { useTranslate } from '@/utils/hooks/useTranslate';
 import { useRequest, useToggle } from 'ahooks';
 import Dialog from './Components/Dialog';
-import { getDepartment, getPosition, onEditValue, onSubmitValue } from './service';
+import {
+  getDepartment,
+  getPosition,
+  onEditValue,
+  onSubmitValue,
+} from './service';
 
 export default () => {
-
-  const params: any = useParams()
+  const params: any = useParams();
 
   const [form] = Form.useForm();
-  const [currentData, setCurrentData] = React.useState<any>(null)
-  const [load, setLoad] = React.useState<any>(true)
+  const [currentData, setCurrentData] = React.useState<any>(null);
+  const [load, setLoad] = React.useState<any>(true);
 
   React.useEffect(() => {
     if (params.id) {
-      setCurrentData(params.name)
-      setLoad(false)
+      setCurrentData(params.name);
+      setLoad(false);
     } else {
-      setLoad(false)
+      setLoad(false);
     }
-  }, [params, params?.id])
-
+  }, [params, params?.id]);
 
   const requestCreateDep = useRequest(onSubmitValue, {
     manual: true,
@@ -69,7 +64,7 @@ export default () => {
 
   const onFinish = (values: any) => {
     const data = {
-      ...values
+      ...values,
     };
     if (!!params.id) {
       requestEditDep.run(data, params.id);
@@ -77,7 +72,7 @@ export default () => {
       requestCreateDep.run(data);
     }
   };
-  const onFinishFailed = (errorInfo: any) => { };
+  const onFinishFailed = (errorInfo: any) => {};
 
   return (
     <>
@@ -90,8 +85,8 @@ export default () => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.tableComponent}>
-        {
-          !load && <Form
+        {!load && (
+          <Form
             name="basic"
             className={styles.itemForm}
             labelCol={{ span: 8 }}
@@ -106,7 +101,7 @@ export default () => {
                 <Form.Item
                   label={'Phòng ban'}
                   initialValue={currentData}
-                  name="department"
+                  name="name"
                   rules={[
                     {
                       required: true,
@@ -143,7 +138,7 @@ export default () => {
               </Col>
             </Row>
           </Form>
-        }
+        )}
       </div>
 
       {openDialog && (

@@ -28,6 +28,7 @@
     "antd": "^4.23.6",
     "antd-img-crop": "^4.2.8",
     "axios": "^0.27.2",
+    "firebase": "^9.15.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "react-infinite-scroll-component": "^6.1.0",

@@ -18,6 +18,18 @@ const App = ({ children }: any) => {
   const { formatMessage } = useIntl();
   const location = useLocation();
 
+  function requestPermission() {
+    console.log('Requesting permission...');
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      }
+    });
+  }
+  React.useEffect(() => {
+    requestPermission();
+  }, []);
+
   const findTitle = () => {
     const result = authRoutes.find((r) => r.path === location.pathname);
     return result?.title || 'Locamos CMS';

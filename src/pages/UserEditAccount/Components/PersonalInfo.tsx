@@ -3,8 +3,8 @@ import { Form, Input, Select } from 'antd';
 import { useIntl } from 'umi';
 import styles from '../index.less';
 type Props = {
-  listPosition: any[]
-  listDepartment: any[]
+  listPosition: any[];
+  listDepartment: any[];
 };
 
 const PersonalInfo = (props: Props) => {
@@ -43,22 +43,6 @@ const PersonalInfo = (props: Props) => {
         ]}
       >
         <Input placeholder="email" />
-      </Form.Item>
-      <Form.Item
-        name="status"
-        label={'Trạng thái'}
-      >
-        <Select>
-          <Select.Option value={'0'} >
-            Tạm khoá
-          </Select.Option>
-          <Select.Option value={'1'} >
-            Được đăng nhập
-          </Select.Option>
-          <Select.Option value={'2'} >
-            Bị Cấm
-          </Select.Option>
-        </Select>
       </Form.Item>
     </div>
   );

@@ -26,7 +26,6 @@ import Dialog from './Components/Dialog';
 import styles from './index.less';
 import { getTableData, switchStatusAdmin } from './service';
 
-
 interface DataType {
   key: string;
   stt: number;
@@ -76,7 +75,7 @@ export default () => {
   };
   const handleEditAdmin = (idAdmin: number | string, record: any) => {
     history.push('/position_edit/' + idAdmin, {
-      record
+      record,
     });
   };
   const handleNewAdmin = () => {
@@ -96,23 +95,26 @@ export default () => {
     },
     {
       title: 'Tên vị trí',
-      dataIndex: 'position',
-      key: 'position',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
-      title: 'Phụ cấp',
-      dataIndex: 'allowance',
-      key: 'allowance',
+      title: 'Lương cơ bản',
+      dataIndex: 'cost_salary',
+      key: 'cost_salary',
     },
     {
-      title: 'Lương',
-      dataIndex: 'salary',
-      key: 'salary',
+      title: 'Lương hoàn thành công việc',
+      dataIndex: 'bonus_salary',
+      key: 'bonus_salary',
     },
     {
-      title: 'Tiền công',
+      title: 'Nhân viên',
       dataIndex: 'wage',
       key: 'wage',
+      render: (value: any, record: any, index: number) => {
+        return record.is_insurance ? 'Chính thức' : 'Thử việc';
+      },
     },
     {
       title: 'Hành động',
@@ -121,7 +123,7 @@ export default () => {
       render: (value: any, record: any, index: number) => {
         return (
           <div className={styles.activeButton}>
-            <Tooltip title={"Chỉnh sửa"}>
+            <Tooltip title={'Chỉnh sửa'}>
               <div
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleEditAdmin(record.id, record)}
@@ -129,7 +131,7 @@ export default () => {
                 <EditOutlined />
               </div>
             </Tooltip>
-            <Tooltip title={"Xoá"}>
+            <Tooltip title={'Xoá'}>
               <div
                 style={{ cursor: 'pointer' }}
                 onClick={() => deleteAdmin(record.id)}
@@ -141,32 +143,23 @@ export default () => {
         );
       },
     },
-  ]
-
+  ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
       <Form form={form} className={styles.searchForm}>
         <Form.Item name="fullName" className={styles.searchItem}>
-          <Input.Search
-            placeholder={'Tìm kiếm'}
-            allowClear
-            onSearch={submit}
-          />
+          <Input.Search placeholder={'Tìm kiếm'} allowClear onSearch={submit} />
         </Form.Item>
       </Form>
-      <Button onClick={() => handleNewAdmin()}>
-        Thêm vị trí
-      </Button>
+      <Button onClick={() => handleNewAdmin()}>Thêm vị trí</Button>
     </div>
   );
 
   return (
     <>
       <Breadcrumb className={styles.breadcrumb}>
-        <Breadcrumb.Item>
-          Quản lý vị trí
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Quản lý vị trí</Breadcrumb.Item>
       </Breadcrumb>
       {searchForm}
       <div className={styles.tableComponent}>

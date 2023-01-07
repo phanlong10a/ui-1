@@ -26,7 +26,6 @@ import Dialog from './Components/Dialog';
 import styles from './index.less';
 import { getTableData, switchStatusAdmin } from './service';
 
-
 interface DataType {
   key: string;
   stt: number;
@@ -94,26 +93,21 @@ export default () => {
     },
     {
       title: 'Tên phòng ban',
-      dataIndex: 'department',
-      key: 'department',
+      dataIndex: 'name',
+      key: 'name',
     },
-  ]
-
+  ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
-      <Form form={form} className={styles.searchForm}>
-
-      </Form>
+      <Form form={form} className={styles.searchForm}></Form>
     </div>
   );
 
   return (
     <>
       <Breadcrumb className={styles.breadcrumb}>
-        <Breadcrumb.Item>
-          Quản lý phòng ban
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Quản lý phòng ban</Breadcrumb.Item>
       </Breadcrumb>
       {searchForm}
       <div className={styles.tableComponent}>

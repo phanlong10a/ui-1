@@ -3,13 +3,7 @@ import { ENVIRONMENTS } from '@/utils/constant';
 import { useTranslate } from '@/utils/hooks/useTranslate';
 import { LeftOutlined } from '@ant-design/icons';
 import { useRequest, useToggle } from 'ahooks';
-import {
-  Breadcrumb,
-  Button,
-  Col,
-  Form,
-  Row
-} from 'antd';
+import { Breadcrumb, Button, Col, Form, Row } from 'antd';
 import { message, Upload } from 'antd';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -21,25 +15,23 @@ import styles from './index.less';
 import { getMyProfile, onSubmitValue } from './service';
 
 export default () => {
-
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [avatarLink, setAvatarLink] = React.useState<any>(null);
-  const [myProfile, setMyProfile] = useState(null)
+  const [myProfile, setMyProfile] = useState(null);
   useRequest(getMyProfile, {
     onSuccess(data: any) {
-      setMyProfile(data.payload)
+      setMyProfile(data.data);
       setFileList([
         {
           uid: '-1',
           name: 'image.png',
           status: 'done',
-          url: data.payload.avatar,
+          url: data.data.avatar,
         },
-      ])
+      ]);
     },
   });
-
 
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
@@ -60,9 +52,9 @@ export default () => {
     file,
     fileList: newFileList,
     event,
-  }) => {
+  }: any) => {
     if (file.response) {
-      setAvatarLink(file.response.payload);
+      setAvatarLink('http://' + file.response.path);
     }
     setFileList(newFileList);
   };
@@ -78,7 +70,6 @@ export default () => {
     },
   });
 
-
   const { t } = useTranslate();
   const [openDialog, setOpenDialog] = useToggle(false);
   const [idSelected, setIdSelected] = React.useState<number | string | null>(
@@ -91,11 +82,12 @@ export default () => {
   const onFinish = (values: any) => {
     const data = {
       ...values,
-      avatar: avatarLink
+      avatar: avatarLink,
+      email: myProfile?.email,
     };
     requestCreateUser.run(data);
   };
-  const onFinishFailed = (errorInfo: any) => { };
+  const onFinishFailed = (errorInfo: any) => {};
 
   return (
     <>
@@ -105,8 +97,8 @@ export default () => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.tableComponent}>
-        {
-          !!myProfile && <Form
+        {!!myProfile && (
+          <Form
             name="basic"
             className={styles.itemForm}
             labelCol={{ span: 8 }}
@@ -171,8 +163,7 @@ export default () => {
               </Col>
             </Row>
           </Form>
-        }
-
+        )}
       </div>
 
       {openDialog && (

@@ -148,7 +148,7 @@ const API_PATH = {
   // Auth
   createUser: '/api/admin/create-employee',
   updateProfile: '/api/user/information',
-  chain_password: '/api/user/chain_password',
+  change_password: '/api/user/change-password',
   updateUser: '/api/admin/user',
   getUser: '/api/user/get-user/',
   deleteUser: '/api/admin/user/',
@@ -193,7 +193,7 @@ const API_PATH = {
   checkin: '/api/timekeeping/entry',
   checkout: '/api/timekeeping/out',
 
-  UPLOAD: '/api/avatar/upload_images',
+  UPLOAD: '/upload-service/file',
   LOGIN: '/api/auth/login',
   LIST_USER: '/api/admin/list-user',
   LIST_USER_USER: '/api/user/list-employee',

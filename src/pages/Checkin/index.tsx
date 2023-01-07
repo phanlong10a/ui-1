@@ -18,7 +18,7 @@ export default () => {
       if (data.errors) {
         message.error('Thất bại');
       } else {
-        setData(data.payload);
+        setData(data);
       }
     },
   });
@@ -48,7 +48,7 @@ export default () => {
       <>
         <Row>
           <Col>
-            {data.entryTime == 'null' ? (
+            {!data.data.checkin ? (
               <Button
                 type="primary"
                 onClick={onCheckin}
@@ -56,7 +56,7 @@ export default () => {
               >
                 Checkin
               </Button>
-            ) : data.timeout == 'null' ? (
+            ) : !data.data.checkout ? (
               <Button
                 type="dashed"
                 onClick={onCheckout}
@@ -69,22 +69,25 @@ export default () => {
             )}
           </Col>
         </Row>
-        {data.entryTime != 'null' && (
+        {!!data.data.checkin && (
           <Row style={{ marginTop: 16 }}>
             <Col>
               Thời gian checkin{' '}
-              {moment(data.entryTime).format('YYYY-MM-DD HH:mm')}
+              {moment(data.data.checkin).format('YYYY-MM-DD HH:mm')}
             </Col>
           </Row>
         )}
-        {data.timeout != 'null' && (
+        {!!data.data.checkout && (
           <Row style={{ marginTop: 16 }}>
             <Col>
               Thời gian checkout{' '}
-              {moment(data.timeout).format('YYYY-MM-DD HH:mm')}
+              {moment(data.data.checkout).format('YYYY-MM-DD HH:mm')}
             </Col>
           </Row>
         )}
+        <Row style={{ marginTop: 16 }}>
+          <Col>Số giờ làm việc trong ngày: {data.total_hours}h</Col>
+        </Row>
       </>
     )
   );

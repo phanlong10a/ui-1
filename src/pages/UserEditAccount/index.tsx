@@ -1,12 +1,5 @@
 import { LeftOutlined } from '@ant-design/icons';
-import {
-  Breadcrumb,
-  Button,
-  Col,
-  Form,
-  message,
-  Row, UploadFile
-} from 'antd';
+import { Breadcrumb, Button, Col, Form, message, Row, UploadFile } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { history, Link, useIntl, useParams } from 'umi';
 import styles from './index.less';
@@ -15,45 +8,48 @@ import { useTranslate } from '@/utils/hooks/useTranslate';
 import { useRequest, useToggle } from 'ahooks';
 import Dialog from './Components/Dialog';
 import PersonalInfo from './Components/PersonalInfo';
-import { getDepartment, getOneUser, getPosition, onSubmitValue } from './service';
+import {
+  getDepartment,
+  getOneUser,
+  getPosition,
+  onSubmitValue,
+} from './service';
 
 export default () => {
   const { formatMessage } = useIntl();
 
-  const params: any = useParams()
-  const [listPosition, setListPosition] = useState<any[]>([])
-  const [listDepartment, setListDepartment] = useState<any[]>([])
-  const [userState, setUserState] = useState<any>(null)
+  const params: any = useParams();
+  const [listPosition, setListPosition] = useState<any[]>([]);
+  const [listDepartment, setListDepartment] = useState<any[]>([]);
+  const [userState, setUserState] = useState<any>(null);
+  console.log('🚀 ~ file: index.tsx:27 ~ userState', userState);
 
   const getUser = useRequest(getOneUser, {
     manual: true,
     onSuccess: (res: any) => {
       setUserState({
-        ...res.payload,
-        departmentId: res.payload.department,
-        positionId: res.payload.position,
-      })
-    }
-  })
+        ...res.data,
+      });
+    },
+  });
 
   useEffect(() => {
     if (params.id) {
-      getUser.run(params.id)
+      getUser.run(params.id);
     }
-  }, [params])
+  }, [params]);
 
   useRequest(getDepartment, {
     onSuccess(res) {
-      setListDepartment(res?.payload)
-    }
-  })
+      setListDepartment(res?.payload);
+    },
+  });
 
   useRequest(getPosition, {
     onSuccess(res) {
-      setListPosition(res?.payload?.data)
-    }
-  })
-
+      setListPosition(res?.payload?.data);
+    },
+  });
 
   const requestCreateUser = useRequest(onSubmitValue, {
     manual: true,
@@ -78,11 +74,11 @@ export default () => {
 
   const onFinish = (values: any) => {
     const data = {
-      ...values
+      ...values,
     };
     requestCreateUser.run(data, params.id);
   };
-  const onFinishFailed = (errorInfo: any) => { };
+  const onFinishFailed = (errorInfo: any) => {};
 
   return (
     <>
@@ -95,8 +91,8 @@ export default () => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.tableComponent}>
-        {
-          !getUser.loading && userState ? <Form
+        {!getUser.loading && userState ? (
+          <Form
             name="basic"
             className={styles.itemForm}
             labelCol={{ span: 8 }}
@@ -109,7 +105,10 @@ export default () => {
             <Row>
               <Col span={12}>
                 <div className={styles.detailAdm}>
-                  <PersonalInfo listPosition={listPosition} listDepartment={listDepartment} />
+                  <PersonalInfo
+                    listPosition={listPosition}
+                    listDepartment={listDepartment}
+                  />
                 </div>
               </Col>
             </Row>
@@ -135,10 +134,10 @@ export default () => {
                 </Button>
               </Col>
             </Row>
-          </Form> : <></>
-
-        }
-
+          </Form>
+        ) : (
+          <></>
+        )}
       </div>
 
       {openDialog && (

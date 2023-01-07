@@ -2,12 +2,13 @@ import { LeftOutlined } from '@ant-design/icons';
 import {
   Breadcrumb,
   Button,
+  Checkbox,
   Col,
   Form,
   Input,
   InputNumber,
   message,
-  Row
+  Row,
 } from 'antd';
 import React, { useState } from 'react';
 import { history, Link, useLocation, useParams } from 'umi';
@@ -16,33 +17,38 @@ import styles from './index.less';
 import { useTranslate } from '@/utils/hooks/useTranslate';
 import { useRequest, useToggle } from 'ahooks';
 import Dialog from './Components/Dialog';
-import { getDepartment, getPosition, onEditValue, onSubmitValue } from './service';
+import {
+  getDepartment,
+  getPosition,
+  onEditValue,
+  onSubmitValue,
+} from './service';
 
 export default () => {
+  const params: any = useParams();
 
-  const params: any = useParams()
-
-  const location: any = useLocation()
-  console.log("🚀 ~ file: index.tsx:26 ~ location", location)
+  const location: any = useLocation();
+  console.log('🚀 ~ file: index.tsx:26 ~ location', location);
   const [form] = Form.useForm();
-  const [currentData, setCurrentData] = React.useState<any>(null)
-  const [load, setLoad] = React.useState<any>(true)
+  const [currentData, setCurrentData] = React.useState<any>(null);
+  console.log('🚀 ~ file: index.tsx:29 ~ currentData', currentData);
+  const [load, setLoad] = React.useState<any>(true);
 
   React.useEffect(() => {
-    initData()
-
-  }, [params, params?.id])
+    initData();
+  }, [params, params?.id]);
 
   const initData = () => {
     if (params?.id) {
       if (!!location.state) {
-        setCurrentData(location.state.record)
-        return
+        setCurrentData(location.state.record);
+        return;
       }
     }
-    setCurrentData({})
-  }
-
+    setCurrentData({
+      is_insurance: false,
+    });
+  };
 
   const requestCreateDep = useRequest(onSubmitValue, {
     manual: true,
@@ -78,7 +84,7 @@ export default () => {
 
   const onFinish = (values: any) => {
     const data = {
-      ...values
+      ...values,
     };
     if (!!params.id) {
       requestEditDep.run(data, params.id);
@@ -86,7 +92,7 @@ export default () => {
       requestCreateDep.run(data);
     }
   };
-  const onFinishFailed = (errorInfo: any) => { };
+  const onFinishFailed = (errorInfo: any) => {};
 
   return (
     <>
@@ -99,8 +105,8 @@ export default () => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.tableComponent}>
-        {
-          currentData && <Form
+        {currentData && (
+          <Form
             name="basic"
             className={styles.itemForm}
             labelCol={{ span: 8 }}
@@ -114,7 +120,7 @@ export default () => {
               <Col md={12} xs={24}>
                 <Form.Item
                   label={'Vị trí'}
-                  name="position"
+                  name="name"
                   rules={[
                     {
                       required: true,
@@ -131,57 +137,49 @@ export default () => {
             <Row>
               <Col md={12} xs={24}>
                 <Form.Item
-                  label={'Phụ Cấp'}
+                  label={'Lương cơ bản'}
                   initialValue={currentData}
-                  name="allowance"
+                  name="cost_salary"
                   rules={[
                     {
                       required: true,
                       message: t('error.require', {
-                        field: 'Phụ Cấp',
+                        field: 'Lương cơ bản',
                       }),
                     },
                   ]}
                 >
-                  <InputNumber placeholder="Phụ Cấp" />
+                  <InputNumber placeholder="Lương cơ bản" />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col md={12} xs={24}>
                 <Form.Item
-                  label={'Lương'}
+                  label={'Lương hoàn thành công việc'}
                   initialValue={currentData}
-                  name="salary"
+                  name="bonus_salary"
                   rules={[
                     {
                       required: true,
                       message: t('error.require', {
-                        field: 'Lương',
+                        field: 'Lương hoàn thành công việc',
                       }),
                     },
                   ]}
                 >
-                  <InputNumber placeholder="Lương" />
+                  <InputNumber placeholder="Lương hoàn thành công việc" />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col md={12} xs={24}>
                 <Form.Item
-                  label={'Tiền công'}
                   initialValue={currentData}
-                  name="wage"
-                  rules={[
-                    {
-                      required: true,
-                      message: t('error.require', {
-                        field: 'Tiền công',
-                      }),
-                    },
-                  ]}
+                  name="is_insurance"
+                  valuePropName="checked"
                 >
-                  <InputNumber placeholder="Tiền công" />
+                  <Checkbox>Nhân viên chính thức</Checkbox>
                 </Form.Item>
               </Col>
             </Row>
@@ -208,8 +206,7 @@ export default () => {
               </Col>
             </Row>
           </Form>
-        }
-
+        )}
       </div>
 
       {openDialog && (

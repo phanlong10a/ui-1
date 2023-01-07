@@ -7,7 +7,7 @@ import {
   Input,
   InputNumber,
   message,
-  Row
+  Row,
 } from 'antd';
 import React, { useState } from 'react';
 import { history, Link, useLocation, useParams } from 'umi';
@@ -16,32 +16,34 @@ import styles from './index.less';
 import { useTranslate } from '@/utils/hooks/useTranslate';
 import { useRequest, useToggle } from 'ahooks';
 import Dialog from './Components/Dialog';
-import { getDepartment, getPosition, onEditValue, onSubmitValue } from './service';
+import {
+  getDepartment,
+  getPosition,
+  onEditValue,
+  onSubmitValue,
+} from './service';
 
 export default () => {
+  const params: any = useParams();
 
-  const params: any = useParams()
-
-  const location: any = useLocation()
+  const location: any = useLocation();
   const [form] = Form.useForm();
-  const [currentData, setCurrentData] = React.useState<any>(null)
-  const [load, setLoad] = React.useState<any>(true)
+  const [currentData, setCurrentData] = React.useState<any>(null);
+  const [load, setLoad] = React.useState<any>(true);
 
   React.useEffect(() => {
-    initData()
-
-  }, [params, params?.id])
+    initData();
+  }, [params, params?.id]);
 
   const initData = () => {
     if (params?.id) {
       if (!!location.state) {
-        setCurrentData(location.state.record)
-        return
+        setCurrentData(location.state.record);
+        return;
       }
     }
-    setCurrentData({})
-  }
-
+    setCurrentData({});
+  };
 
   const requestCreateDep = useRequest(onSubmitValue, {
     manual: true,
@@ -77,7 +79,7 @@ export default () => {
 
   const onFinish = (values: any) => {
     const data = {
-      ...values
+      ...values,
     };
     if (!!params.id) {
       requestEditDep.run(data, params.id);
@@ -85,7 +87,7 @@ export default () => {
       requestCreateDep.run(data);
     }
   };
-  const onFinishFailed = (errorInfo: any) => { };
+  const onFinishFailed = (errorInfo: any) => {};
 
   return (
     <>
@@ -98,8 +100,8 @@ export default () => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.tableComponent}>
-        {
-          currentData && <Form
+        {currentData && (
+          <Form
             name="basic"
             className={styles.itemForm}
             labelCol={{ span: 8 }}
@@ -113,7 +115,7 @@ export default () => {
               <Col md={12} xs={24}>
                 <Form.Item
                   label={'Tiêu đề'}
-                  name="typeOfNews"
+                  name="title"
                   rules={[
                     {
                       required: true,
@@ -168,8 +170,7 @@ export default () => {
               </Col>
             </Row>
           </Form>
-        }
-
+        )}
       </div>
 
       {openDialog && (

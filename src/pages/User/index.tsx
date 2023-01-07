@@ -111,18 +111,23 @@ export default () => {
       key: 'fullName',
     },
     {
-      title: 'Ngày Sinh',
-      dataIndex: 'dateOfBirth',
-      key: 'dateOfBirth',
+      title: 'Mail',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Mã nhân viên',
+      dataIndex: 'staffCode',
+      key: 'staffCode',
     },
     {
       title: 'Ban',
-      dataIndex: 'department',
+      dataIndex: ['department', 'name'],
       key: 'department',
     },
     {
       title: 'Vị Trí',
-      dataIndex: 'position',
+      dataIndex: ['position', 'name'],
       key: 'position',
     },
     {
@@ -132,7 +137,7 @@ export default () => {
       render: (value: any, record: any, index: number) => {
         return (
           <div className={styles.activeButton}>
-            <Tooltip title={"Chỉnh sửa"}>
+            <Tooltip title={'Chỉnh sửa'}>
               <div
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleEditAdmin(record.id)}
@@ -140,7 +145,7 @@ export default () => {
                 <EditOutlined />
               </div>
             </Tooltip>
-            <Tooltip title={"Xoá"}>
+            <Tooltip title={'Xoá'}>
               <div
                 style={{ cursor: 'pointer' }}
                 onClick={() => deleteAdmin(record.id)}
@@ -152,8 +157,7 @@ export default () => {
         );
       },
     },
-  ]
-
+  ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
@@ -175,9 +179,7 @@ export default () => {
   return (
     <>
       <Breadcrumb className={styles.breadcrumb}>
-        <Breadcrumb.Item>
-          Quản lý nhân viên
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Quản lý nhân viên</Breadcrumb.Item>
       </Breadcrumb>
       {searchForm}
       <div className={styles.tableComponent}>

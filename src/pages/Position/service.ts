@@ -23,17 +23,17 @@ export const getTableData = (
   return privateRequest(request.post, API_PATH.list_position, {
     data: {
       ...data,
-      position: formData.fullName,
+      search_text: formData.fullName,
     },
   }).then((res: any) => {
     console.log('🚀 ~ file: service.ts:30 ~ res', res);
-    const result = res?.payload?.data.map((e: any, index: any) => ({
+    const result = res?.data.map((e: any, index: any) => ({
       ...e,
       stt: index + 1,
     }));
     return {
       list: result,
-      total: res?.payload?.totalPages,
+      total: res?.total,
     };
   });
 };

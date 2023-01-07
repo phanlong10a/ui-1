@@ -111,39 +111,37 @@ export default () => {
       key: 'fullName',
     },
     {
-      title: 'Ngày Sinh',
-      dataIndex: 'dateOfBirth',
-      key: 'dateOfBirth',
+      title: 'Mail',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Mã nhân viên',
+      dataIndex: 'staffCode',
+      key: 'staffCode',
     },
     {
       title: 'Ban',
-      dataIndex: 'department',
+      dataIndex: ['department', 'name'],
       key: 'department',
     },
     {
       title: 'Vị Trí',
-      dataIndex: 'position',
+      dataIndex: ['position', 'name'],
       key: 'position',
     },
-  ]
-
+  ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
-      <Form form={form} className={styles.searchForm}>
-
-
-      </Form>
-
+      <Form form={form} className={styles.searchForm}></Form>
     </div>
   );
 
   return (
     <>
       <Breadcrumb className={styles.breadcrumb}>
-        <Breadcrumb.Item>
-          Quản lý nhân viên
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Quản lý nhân viên</Breadcrumb.Item>
       </Breadcrumb>
       {searchForm}
       <div className={styles.tableComponent}>

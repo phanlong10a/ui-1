@@ -1,6 +1,8 @@
 import { formatTime } from '../../utils/formatTime';
 import { privateRequest, request, API_PATH } from '@/utils/apis';
 import { ENVIRONMENTS } from '@/utils/constant';
+import { Moment } from 'moment';
+import moment from 'moment';
 
 interface Result {
   list: any[];
@@ -9,39 +11,36 @@ interface Result {
 export const getTableData = (
   { current, pageSize }: { current: number; pageSize: number },
   formData: {
-    months: string;
-    staffCode: string
+    range: Moment[];
+    staffCode: string;
   },
 ): Promise<Result> => {
-  if (formData.months === undefined) {
-    formData.months = '';
-  }
+  console.log('🚀 ~ file: service.ts:18 ~ formData', formData);
+
   const data = {
     page: current,
-    size: pageSize
+    size: pageSize,
   };
 
   return privateRequest(request.post, API_PATH.dot_information, {
     data: {
-      month: formData.months,
-      staffCode: formData.staffCode
-    }
-  }).then(
-    (res: any) => {
-      console.log("🚀 ~ file: service.ts:32 ~ res", res)
-      const result = res?.payload?.keeping?.map(
-        (e: any, index: any) => ({
-          ...e,
-          stt: index + 1,
-        }),
-      );
-      return {
-        list: result,
-        name: res?.payload?.name,
-        total: res?.payload?.totalElements,
-      }
+      ...data,
+      start_date: formData.range ? moment(formData.range[0]).format() : null,
+      end_date: formData.range ? moment(formData.range[1]).format() : null,
+      staffCode: formData.staffCode,
     },
-  );
+  }).then((res: any) => {
+    console.log('🚀 ~ file: service.ts:32 ~ res', res);
+    const result = res?.data?.map((e: any, index: any) => ({
+      ...e,
+      stt: index + 1,
+    }));
+    return {
+      list: result,
+      name: '',
+      total: res?.total,
+    };
+  });
 };
 
 export const deleteAdmin = (id: any) => {

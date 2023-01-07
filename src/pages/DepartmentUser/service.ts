@@ -17,22 +17,20 @@ export const getTableData = (
   }
   const data = {
     page: current,
-    size: pageSize
+    size: pageSize,
   };
 
   return privateRequest(request.get, API_PATH.list_department_user).then(
     (res: any) => {
-      console.log("🚀 ~ file: service.ts:37 ~ res", res)
-      const result = res?.payload?.map(
-        (e: any, index: any) => ({
-          ...e,
-          stt: index + 1,
-        }),
-      );
+      console.log('🚀 ~ file: service.ts:37 ~ res', res);
+      const result = res?.map((e: any, index: any) => ({
+        ...e,
+        stt: index + 1,
+      }));
       return {
         list: result,
-        total: res?.payload?.totalElements,
-      }
+        total: result.length,
+      };
     },
   );
 };

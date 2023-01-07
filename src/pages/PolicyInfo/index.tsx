@@ -115,7 +115,7 @@ export default () => {
               <Col md={12} xs={24}>
                 <Form.Item
                   label={'Tiêu đề'}
-                  name="namePolicy"
+                  name="title"
                   rules={[
                     {
                       required: true,
@@ -133,7 +133,7 @@ export default () => {
               <Col md={12} xs={24}>
                 <Form.Item
                   label={'Nội dung'}
-                  name="contentPolicy"
+                  name="content"
                   rules={[
                     {
                       required: true,

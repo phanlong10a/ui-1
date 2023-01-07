@@ -1,13 +1,14 @@
 import { Button, Form, Input, message, Radio, RadioChangeEvent } from 'antd';
 import React, { useState } from 'react';
 import { useLogin } from './service';
-
+import { getToken } from 'firebase/messaging';
 import styles from './index.less';
 import { useTranslate } from '@/utils/hooks/useTranslate';
 import axios from 'axios';
 import { API_PATH } from '@/utils/apis';
 import { ENVIRONMENTS } from '@/utils/constant';
 import Dialog from './Components/Dialog';
+import { messaging } from '@/utils/firebaseConfig';
 
 const Login: React.FC = () => {
   const { t } = useTranslate();
@@ -18,6 +19,20 @@ const Login: React.FC = () => {
   const [idForgot, setIdForgot] = useState(null);
 
   const onFinish = async (values: any) => {
+    // getToken(messaging, { vapidKey: 'BNR7pofGdZZ9CaWOrQ0wkUqs_tiGZVayyGl5X3lcvypaMjHcH5dtCwJqwX0oHVWX9Pn1tSoL71qnRmji2FGDfY0' }).then((currentToken) => {
+    //   if (currentToken) {
+    //     console.log("🚀 ~ file: index.tsx:24 ~ getToken ~ currentToken", currentToken)
+    //     // Send the token to your server and update the UI if necessary
+    //     // ...
+    //   } else {
+    //     // Show permission request UI
+    //     console.log('No registration token available. Request permission to generate one.');
+    //     // ...
+    //   }
+    // }).catch((err) => {
+    //   console.log('An error occurred while retrieving token. ', err);
+    //   // ...
+    // });
     if (isForgot) {
       if (isForgotEmail) {
         await axios
@@ -52,8 +67,8 @@ const Login: React.FC = () => {
           onFinish={onFinish}
           layout="vertical"
           initialValues={{
-            phone_number: 'vuhoan485@gmail.com',
-            password: 'hoan10a8',
+            phone_number: 'admin@gmail.com',
+            password: '12345678',
           }}
         >
           <Form.Item

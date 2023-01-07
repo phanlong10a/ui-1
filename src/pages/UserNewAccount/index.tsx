@@ -1,12 +1,5 @@
 import { LeftOutlined } from '@ant-design/icons';
-import {
-  Breadcrumb,
-  Button,
-  Col,
-  Form,
-  message,
-  Row, UploadFile
-} from 'antd';
+import { Breadcrumb, Button, Col, Form, message, Row, UploadFile } from 'antd';
 import React, { useState } from 'react';
 import { history, Link, useIntl } from 'umi';
 import styles from './index.less';
@@ -18,22 +11,20 @@ import PersonalInfo from './Components/PersonalInfo';
 import { getDepartment, getPosition, onSubmitValue } from './service';
 
 export default () => {
-
-  const [listPosition, setListPosition] = useState<any[]>([])
-  const [listDepartment, setListDepartment] = useState<any[]>([])
+  const [listPosition, setListPosition] = useState<any[]>([]);
+  const [listDepartment, setListDepartment] = useState<any[]>([]);
 
   useRequest(getDepartment, {
     onSuccess(res) {
-      setListDepartment(res?.payload)
-    }
-  })
+      setListDepartment(res);
+    },
+  });
 
   useRequest(getPosition, {
     onSuccess(res) {
-      setListPosition(res?.payload?.data)
-    }
-  })
-
+      setListPosition(res);
+    },
+  });
 
   const requestCreateUser = useRequest(onSubmitValue, {
     manual: true,
@@ -58,11 +49,11 @@ export default () => {
 
   const onFinish = (values: any) => {
     const data = {
-      ...values
+      ...values,
     };
     requestCreateUser.run(data);
   };
-  const onFinishFailed = (errorInfo: any) => { };
+  const onFinishFailed = (errorInfo: any) => {};
 
   return (
     <>
@@ -88,7 +79,10 @@ export default () => {
           <Row>
             <Col span={12}>
               <div className={styles.detailAdm}>
-                <PersonalInfo listPosition={listPosition} listDepartment={listDepartment} />
+                <PersonalInfo
+                  listPosition={listPosition}
+                  listDepartment={listDepartment}
+                />
               </div>
             </Col>
           </Row>

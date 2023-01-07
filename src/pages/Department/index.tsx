@@ -26,7 +26,6 @@ import Dialog from './Components/Dialog';
 import styles from './index.less';
 import { getTableData, switchStatusAdmin } from './service';
 
-
 interface DataType {
   key: string;
   stt: number;
@@ -94,8 +93,8 @@ export default () => {
     },
     {
       title: 'Tên phòng ban',
-      dataIndex: 'department',
-      key: 'department',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Hành động',
@@ -104,15 +103,15 @@ export default () => {
       render: (value: any, record: any, index: number) => {
         return (
           <div className={styles.activeButton}>
-            <Tooltip title={"Chỉnh sửa"}>
+            <Tooltip title={'Chỉnh sửa'}>
               <div
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleEditAdmin(record.id, record.department)}
+                onClick={() => handleEditAdmin(record.id, record.name)}
               >
                 <EditOutlined />
               </div>
             </Tooltip>
-            <Tooltip title={"Xoá"}>
+            <Tooltip title={'Xoá'}>
               <div
                 style={{ cursor: 'pointer' }}
                 onClick={() => deleteAdmin(record.id)}
@@ -124,32 +123,23 @@ export default () => {
         );
       },
     },
-  ]
-
+  ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
       <Form form={form} className={styles.searchForm}>
         <Form.Item name="fullName" className={styles.searchItem}>
-          <Input.Search
-            placeholder={'Tìm kiếm'}
-            allowClear
-            onSearch={submit}
-          />
+          <Input.Search placeholder={'Tìm kiếm'} allowClear onSearch={submit} />
         </Form.Item>
       </Form>
-      <Button onClick={() => handleNewAdmin()}>
-        Thêm phòng ban
-      </Button>
+      <Button onClick={() => handleNewAdmin()}>Thêm phòng ban</Button>
     </div>
   );
 
   return (
     <>
       <Breadcrumb className={styles.breadcrumb}>
-        <Breadcrumb.Item>
-          Quản lý phòng ban
-        </Breadcrumb.Item>
+        <Breadcrumb.Item>Quản lý phòng ban</Breadcrumb.Item>
       </Breadcrumb>
       {searchForm}
       <div className={styles.tableComponent}>

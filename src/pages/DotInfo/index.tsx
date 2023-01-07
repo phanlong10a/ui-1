@@ -2,8 +2,10 @@ import { useAntdTable, useToggle } from 'ahooks';
 import {
   Breadcrumb,
   Button,
+  DatePicker,
   Form,
   Input,
+  InputNumber,
   message,
   Skeleton,
   Table,
@@ -25,6 +27,9 @@ interface DataType {
   dateOfBirth: string;
   status: string;
 }
+
+const { RangePicker } = DatePicker;
+
 export default () => {
   const [openDialog, setOpenDialog] = useToggle(false);
   const [tableVisible, setTableVisible] = useState(false);
@@ -64,16 +69,33 @@ export default () => {
       align: 'center',
     },
     {
+      title: 'Tên nhân viên',
+      dataIndex: ['user', 'fullname'],
+      key: 'fullname',
+    },
+    {
+      title: 'Mã nhân viên',
+      dataIndex: ['user', 'staffCode'],
+      key: 'staffCode',
+    },
+    {
       title: ' Ngày ',
       dataIndex: 'day',
       key: 'day',
+      render: (_: any, record: any) => {
+        return record?.data?.checkin
+          ? moment(record?.data?.checkin).format('YYYY/MM/DD')
+          : '';
+      },
     },
     {
       title: 'Giờ vào',
       dataIndex: 'salary',
       key: 'salary',
       render: (_: any, record: any) => {
-        return moment(record.entryTime).format('YYYY/MM/DD HH:mm:ss');
+        return record?.data?.checkin
+          ? moment(record?.data?.checkin).format('HH:mm:ss')
+          : '';
       },
     },
     {
@@ -81,16 +103,23 @@ export default () => {
       dataIndex: 'timeout',
       key: 'timeout',
       render: (_: any, record: any) => {
-        return moment(record.timeout).format('YYYY/MM/DD HH:mm:ss');
+        return record?.data?.checkout
+          ? moment(record?.data?.checkout).format('HH:mm:ss')
+          : '';
       },
+    },
+    {
+      title: 'Tổng số giờ làm',
+      dataIndex: ['total_hours'],
+      key: 'total_hours',
     },
   ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
       <Form form={form} className={styles.searchForm}>
-        <Form.Item name="months" className={styles.searchItem}>
-          <Input placeholder={'Nhập tháng cần xem lương'} allowClear />
+        <Form.Item name="range" className={styles.searchItem}>
+          <RangePicker style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item name="staffCode" className={styles.searchItem}>
           <Input placeholder={'Nhập mã nhân viên'} allowClear required />

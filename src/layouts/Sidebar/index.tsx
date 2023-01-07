@@ -127,7 +127,7 @@ const Sidebar = ({
         ),
       ]);
     }
-    if (authObj.role === 'EDITER') {
+    if (authObj.role === 'EDITOR') {
       setCurrentMenu([
         getItem(
           renderLink('/list-salary', 'Danh sách lương nhân viên'),
@@ -140,7 +140,7 @@ const Sidebar = ({
           <IdcardOutlined />,
         ),
         getItem(
-          renderLink('/dot_infomation', 'Danh sách'),
+          renderLink('/dot_infomation', 'Danh sách chấm công'),
           '/dot_infomation',
           <IdcardOutlined />,
         ),

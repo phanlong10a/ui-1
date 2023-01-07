@@ -17,29 +17,25 @@ export const getTableData = (
   }
   const data = {
     page: current,
-    size: pageSize
+    size: pageSize,
   };
 
   return privateRequest(request.post, API_PATH.list_department, {
     data: {
       ...data,
-      department: formData.fullName
-    }
-  }).then(
-    (res: any) => {
-      console.log("🚀 ~ file: service.ts:37 ~ res", res)
-      const result = res?.payload?.data.map(
-        (e: any, index: any) => ({
-          ...e,
-          stt: index + 1,
-        }),
-      );
-      return {
-        list: result,
-        total: res?.payload?.totalElements,
-      }
+      search_text: formData.fullName,
     },
-  );
+  }).then((res: any) => {
+    console.log('🚀 ~ file: service.ts:37 ~ res', res);
+    const result = res?.data.map((e: any, index: any) => ({
+      ...e,
+      stt: index + 1,
+    }));
+    return {
+      list: result,
+      total: res?.total,
+    };
+  });
 };
 
 export const deleteAdmin = (id: any) => {

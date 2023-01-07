@@ -11,14 +11,15 @@ export const useLogin = () => {
       return request.post(API_PATH.LOGIN, {
         data: {
           email: values?.phone_number?.trim(),
-          password: values?.password
+          password: values?.password,
         },
       });
     },
     {
       manual: true,
       onSuccess: (result) => {
-        if (!result.payload || result?.code === 400 || result?.code === 404) throw new Error('Account not found');
+        console.log('🚀 ~ file: service.ts:32 ~ useLogin ~ result', result);
+        if (result?.statusCode === 400) throw new Error('Account not found');
         const loginItem = {
           token: result.payload.token,
           refreshToken: result.payload.refresh_token,
@@ -26,7 +27,7 @@ export const useLogin = () => {
         onLogin(loginItem);
       },
       onError: (err) => {
-        message.error(err?.message || 'Login failed');
+        console.log('🚀 ~ file: service.ts:32 ~ useLogin ~ err', err);
       },
     },
   );

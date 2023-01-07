@@ -3,8 +3,8 @@ import { Form, Input, Select } from 'antd';
 import { useIntl } from 'umi';
 import styles from '../index.less';
 type Props = {
-  listPosition: any[]
-  listDepartment: any[]
+  listPosition: any[];
+  listDepartment: any[];
 };
 
 const PersonalInfo = (props: Props) => {
@@ -13,7 +13,6 @@ const PersonalInfo = (props: Props) => {
 
   return (
     <div className={styles.formGeneric}>
-
       <Form.Item
         label={'Email'}
         name="email"
@@ -25,7 +24,7 @@ const PersonalInfo = (props: Props) => {
             }),
           },
           {
-            type: 'email'
+            type: 'email',
           },
         ]}
       >
@@ -55,45 +54,32 @@ const PersonalInfo = (props: Props) => {
           })}
         />
       </Form.Item> */}
-      <Form.Item
-        name="positionId"
-        label={'Vị trí'}
-      >
+      <Form.Item name="positionId" label={'Vị trí'}>
         <Select>
-          {
-            props.listPosition.map((e, i) => {
-              return <Select.Option value={e.id} key={e.id}>
-                {e.position}
+          {props.listPosition.map((e, i) => {
+            return (
+              <Select.Option value={e.id} key={e.id}>
+                {e.name}
               </Select.Option>
-            })
-          }
+            );
+          })}
         </Select>
       </Form.Item>
-      <Form.Item
-        name="departmentId"
-        label={'Department'}
-      >
+      <Form.Item name="departmentId" label={'Department'}>
         <Select>
-          {
-            props.listDepartment.map((e, i) => {
-              return <Select.Option value={e.id} key={e.id}>
-                {e.department}
+          {props.listDepartment.map((e, i) => {
+            return (
+              <Select.Option value={e.id} key={e.id}>
+                {e.name}
               </Select.Option>
-            })
-          }
+            );
+          })}
         </Select>
       </Form.Item>
-      <Form.Item
-        name="role"
-        label={'Quyền'}
-      >
+      <Form.Item name="role" label={'Quyền'}>
         <Select>
-          <Select.Option value={'2'} >
-            staff
-          </Select.Option>
-          <Select.Option value={'3'} >
-            editor
-          </Select.Option>
+          <Select.Option value={'STAFF'}>STAFF</Select.Option>
+          <Select.Option value={'EDITOR'}>EDITOR</Select.Option>
         </Select>
       </Form.Item>
       {/* <Form.Item
