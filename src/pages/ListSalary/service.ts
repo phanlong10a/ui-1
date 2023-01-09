@@ -1,6 +1,7 @@
 import { formatTime } from '../../utils/formatTime';
 import { privateRequest, request, API_PATH } from '@/utils/apis';
 import { ENVIRONMENTS } from '@/utils/constant';
+import moment from 'moment';
 
 interface Result {
   list: any[];
@@ -8,38 +9,53 @@ interface Result {
 
 export const getTableData = (
   { current, pageSize }: { current: number; pageSize: number },
-  formData: {
-    months: string;
-  },
+  formData: any,
 ): Promise<Result> => {
   if (formData.months === undefined) {
     formData.months = '';
   }
   const data = {
     page: current,
-    size: pageSize
+    size: pageSize,
   };
 
   return privateRequest(request.post, API_PATH.list_salary, {
     data: {
       ...data,
-      months: formData.months
-    }
-  }).then(
-    (res: any) => {
-      console.log("🚀 ~ file: service.ts:37 ~ res", res)
-      const result = res?.payload?.data.map(
-        (e: any, index: any) => ({
-          ...e,
-          stt: index + 1,
-        }),
-      );
-      return {
-        list: result,
-        total: res?.payload?.totalElements,
-      }
+      ...formData,
+      start_date: formData.range ? moment(formData.range[0]).format() : null,
+      end_date: formData.range ? moment(formData.range[1]).format() : null,
     },
-  );
+  }).then((res: any) => {
+    console.log('🚀 ~ file: service.ts:37 ~ res', res);
+    const result = res?.data.map((e: any, index: any) => ({
+      ...e,
+      stt: index + 1,
+    }));
+    return {
+      list: result,
+      total: res?.total,
+    };
+  });
+};
+
+export const getExcel = (formData: any): Promise<Result> => {
+  if (formData.months === undefined) {
+    formData.months = '';
+  }
+  const data = {
+    page: 1,
+    size: 1,
+  };
+
+  return privateRequest(request.post, API_PATH.excel, {
+    data: {
+      ...data,
+      ...formData,
+      start_date: formData.range ? moment(formData.range[0]).format() : null,
+      end_date: formData.range ? moment(formData.range[1]).format() : null,
+    },
+  });
 };
 
 export const deleteAdmin = (id: any) => {

@@ -1,5 +1,6 @@
-import { OPTION_STATUS_ACTIVE } from '@/utils/constant';
+import { ENVIRONMENTS, OPTION_STATUS_ACTIVE } from '@/utils/constant';
 import { StatusAccount } from '@/utils/enum';
+import { numberWithDots } from '@/utils/formatNumber';
 import {
   CheckOutlined,
   EditOutlined,
@@ -10,8 +11,10 @@ import { useAntdTable, useToggle } from 'ahooks';
 import {
   Breadcrumb,
   Button,
+  DatePicker,
   Form,
   Input,
+  InputNumber,
   message,
   Select,
   Skeleton,
@@ -24,7 +27,7 @@ import React, { useState } from 'react';
 import { useIntl, useHistory, useRequest } from 'umi';
 import Dialog from './Components/Dialog';
 import styles from './index.less';
-import { getTableData, switchStatusAdmin } from './service';
+import { getExcel, getTableData, switchStatusAdmin } from './service';
 
 interface DataType {
   key: string;
@@ -35,6 +38,8 @@ interface DataType {
   dateOfBirth: string;
   status: string;
 }
+
+const { RangePicker } = DatePicker;
 export default () => {
   const [openDialog, setOpenDialog] = useToggle(false);
   const [tableVisible, setTableVisible] = useState(false);
@@ -98,28 +103,103 @@ export default () => {
       key: 'fullName',
     },
     {
-      title: 'Lương',
-      dataIndex: 'salary',
-      key: 'salary',
+      title: 'Mã nhân viên',
+      dataIndex: 'staffCode',
+      key: 'staffCode',
+    },
+    {
+      title: 'Tổng số giờ làm việc',
+      dataIndex: 'totalWork',
+      key: 'totalWork',
+    },
+    {
+      title: 'Bảo hiểm phải đóng',
+      dataIndex: 'total_insurance',
+      key: 'total_insurance',
+      render(_, record: any) {
+        return numberWithDots(record.total_insurance);
+      },
+    },
+    {
+      title: 'Lương cơ bản',
+      dataIndex: 'cost_salary',
+      key: 'cost_salary',
+      render(_, record: any) {
+        return numberWithDots(record.cost_salary);
+      },
+    },
+    {
+      title: 'Lương hoàn thành công việc',
+      dataIndex: 'bonus_salary',
+      key: 'bonus_salary',
+      render(_, record: any) {
+        return numberWithDots(record.bonus_salary);
+      },
+    },
+    {
+      title: 'Lương dự kiến',
+      dataIndex: 'expected_salary',
+      key: 'expected_salary',
+      render(_, record: any) {
+        return numberWithDots(record.expected_salary.toFixed(0));
+      },
+    },
+    {
+      title: 'Thuế thu nhập cá nhân dự kiến',
+      dataIndex: 'expected_salary',
+      key: 'expected_salary',
+      render(_, record: any) {
+        return numberWithDots(record.tax.toFixed(0));
+      },
     },
   ];
 
   const searchForm = (
     <div className={styles.searchContainer}>
       <Form form={form} className={styles.searchForm}>
-        <Form.Item name="months" className={styles.searchItem}>
-          <Input.Search
-            placeholder={'Nhập tháng cần xem lương'}
-            allowClear
-            onSearch={() => {
-              submit();
-              setTableVisible(true);
-            }}
+        <Form.Item name="range" className={styles.searchItem}>
+          <RangePicker style={{ width: '100%' }} />
+        </Form.Item>
+        <Form.Item name="staffCode" className={styles.searchItem}>
+          <Input placeholder={'Nhập mã nhân viên'} allowClear required />
+        </Form.Item>
+
+        <Form.Item
+          name="total_day_worked"
+          rules={[
+            {
+              required: true,
+              message: 'Không được bỏ trống ',
+            },
+          ]}
+          className={styles.searchItem}
+        >
+          <InputNumber
+            style={{ width: '100%' }}
+            placeholder={'Số ngày làm việc ước tính'}
+            required
           />
         </Form.Item>
+
+        <Button
+          type="primary"
+          onClick={() => {
+            submit();
+            setTableVisible(true);
+          }}
+        >
+          Tỉm kiếm
+        </Button>
       </Form>
     </div>
   );
+
+  const onExportExcel = () => {
+    const value = form.getFieldsValue();
+    getExcel(value).then(() => {
+      window.open(ENVIRONMENTS.API_URL + '/output_excel/file.xlsx', 'blank');
+    });
+  };
 
   return (
     <>
@@ -132,12 +212,21 @@ export default () => {
           {loading || error ? (
             <Skeleton active />
           ) : (
-            <Table
-              {...tableProps}
-              columns={columns}
-              locale={{ emptyText: 'Trống' }}
-              scroll={{ x: 1000 }}
-            />
+            <>
+              <Button
+                onClick={() => {
+                  onExportExcel();
+                }}
+              >
+                Xuất excel
+              </Button>
+              <Table
+                {...tableProps}
+                columns={columns}
+                locale={{ emptyText: 'Trống' }}
+                scroll={{ x: 1000 }}
+              />
+            </>
           )}
         </div>
       )}

@@ -183,7 +183,10 @@ const API_PATH = {
 
   my_profile: '/api/user/profile',
 
+  excel: '/api/dot/export-excel',
+  excel_bill: '/api/dot/export-salary-bill',
   list_salary: '/api/dot/list-salary',
+  salary_search: '/api/dot/salary',
   dot_information: '/api/dot/dot_information',
 
   get_keeping: '/api/timekeeping/get-keeping',

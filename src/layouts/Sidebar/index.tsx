@@ -135,7 +135,7 @@ const Sidebar = ({
           <IdcardOutlined />,
         ),
         getItem(
-          renderLink('/salary', 'Tính lương nhân viên'),
+          renderLink('/salary', 'Xuất phiếu lương dự kiến'),
           '/salary',
           <IdcardOutlined />,
         ),

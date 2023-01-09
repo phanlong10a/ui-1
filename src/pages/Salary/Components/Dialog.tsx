@@ -1,19 +1,7 @@
-import { useRequest, useSetState, useToggle } from 'ahooks';
-import {
-  Col,
-  Modal,
-  Form,
-  Image,
-  Input,
-  message,
-  Row,
-  Select,
-  Skeleton,
-  Button,
-} from 'antd';
+import { Modal, Select } from 'antd';
 import React, { useState } from 'react';
-import { paternPhone } from '@/utils/patern';
-import { history, useIntl } from 'umi';
+import { useRequest } from 'umi';
+import { deleteAdmin } from '../service';
 const { Option } = Select;
 
 interface Iprops {
@@ -48,16 +36,21 @@ const Dialog: React.FC<Iprops> = ({
   children,
   ...rest
 }) => {
+  const id = itemEdit;
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Bạn có chắc chắn muốn huỷ ?');
+  const [modalText, setModalText] = useState(
+    'Bạn có chắc chắn muốn xoá tài khoản này',
+  );
 
-  const handleOk = () => {
+  const deteteRequest = useRequest(deleteAdmin, {
+    manual: true,
+  });
+  const handleOk = async () => {
+    await deteteRequest.run(id);
     setOpen(false);
-    history.push('/admin');
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setOpen(false);
   };
   return (
